@@ -12,6 +12,17 @@
   </build>
   <dependencies>
     <dependency>
+      <groupId>io.springfox</groupId>
+      <artifactId>springfox-swagger2</artifactId>
+      <version>${sptingfox.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.springfox</groupId>
+      <artifactId>springfox-swagger-ui</artifactId>
+      <version>${sptingfox.version}</version>
+    </dependency>
+
+    <dependency>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
       <groupId>org.springframework.boot</groupId>
     </dependency>
@@ -66,6 +77,7 @@
 
   <properties>
     <java.version>1.8</java.version>
+    <sptingfox.version>2.9.2</sptingfox.version>
   </properties>
 
   <version>0.0.1-SNAPSHOT</version>
