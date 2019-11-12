@@ -1,7 +1,7 @@
-package bg.bestbooks.BestBooks.components.book.controller;
+package bg.bestbooks.components.book.controller;
 
-import bg.bestbooks.BestBooks.components.book.model.Book;
-import bg.bestbooks.BestBooks.components.book.repository.BooksRepository;
+import bg.bestbooks.components.book.model.Book;
+import bg.bestbooks.components.book.repository.BooksRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,7 +31,7 @@ public class BooksController {
 
   @GetMapping(produces = "application/json")
   public List<Book> findAll() {
-    return (List<Book>) booksRepository.findAll();
+    return booksRepository.findAll();
   }
 
   @GetMapping(path = "/{id}", produces = "application/json")

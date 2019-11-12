@@ -1,4 +1,4 @@
-package bg.bestbooks.BestBooks.components.user.model;
+package bg.bestbooks.components.user.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

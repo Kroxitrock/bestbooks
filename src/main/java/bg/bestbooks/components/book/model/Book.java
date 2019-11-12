@@ -1,5 +1,6 @@
-package bg.bestbooks.BestBooks.components.book.model;
+package bg.bestbooks.components.book.model;
 
+import bg.bestbooks.components.author.model.Author;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

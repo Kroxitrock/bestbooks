@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS bestbooks;
+DROP DATABASE IF EXISTS `bestbooks`;
 
-CREATE DATABASE bestbooks;
+CREATE DATABASE `bestbooks`;
 
-USE bestbooks;
+USE `bestbooks`;
 
 CREATE TABLE `users`
 (

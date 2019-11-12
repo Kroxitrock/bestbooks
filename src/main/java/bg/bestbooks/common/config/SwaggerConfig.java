@@ -1,4 +1,4 @@
-package bg.bestbooks.BestBooks.common.config;
+package bg.bestbooks.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
