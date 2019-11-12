@@ -69,18 +69,18 @@ CREATE TABLE `books`
 INSERT INTO `users` (email, username, password)
 VALUES ('admin@admin.ad',
         'admin',
-        'YWRtaW4=');
+        '$2a$10$DPzfOeKYt3FYNKkNb7vCruQjcD3oqx2k/uf3UlfDXHZXL.SNLtTp6');
 
 INSERT INTO `authorities` (name, description)
-VALUES ('R_ADMIN',
+VALUES ('ROLE_ADMIN',
         'Admin role');
 
 INSERT INTO `authorities` (name, description)
-VALUES ('R_AUTHOR',
+VALUES ('ROLE_AUTHOR',
         'Author role');
 
 INSERT INTO `authorities` (name, description)
-VALUES ('R_USER',
+VALUES ('ROLE_USER',
         'User role');
 
 INSERT INTO `authorities` (name, description)

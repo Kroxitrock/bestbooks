@@ -3,6 +3,7 @@ package bg.bestbooks.components.book.controller;
 import bg.bestbooks.components.book.model.Book;
 import bg.bestbooks.components.book.repository.BooksRepository;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +37,9 @@ public class BooksController {
 
   @GetMapping(path = "/{id}", produces = "application/json")
   public Book findById(@PathVariable Integer id) {
-    return booksRepository.findById(id).get();
+    Optional<Book> book = booksRepository.findById(id);
+
+    return book.orElse(null);
   }
 
   @PutMapping(consumes = "application/json")
