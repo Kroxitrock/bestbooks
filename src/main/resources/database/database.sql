@@ -55,13 +55,28 @@ CREATE TABLE `authors`
 
 CREATE TABLE `books`
 (
-    `id`          int(11)      NOT NULL AUTO_INCREMENT,
-    `name`        varchar(128) NOT NULL,
-    `description` text         NOT NULL,
-    `author_id`   int(11)      NOT NULL,
+    `id`          int(11)       NOT NULL AUTO_INCREMENT,
+    `name`        varchar(128)  NOT NULL,
+    `description` varchar(1024) NULL,
+    `cover`       blob          NULL,
+    `pages`       smallint(6)   NULL,
+    `author_id`   int(11)       NOT NULL,
     PRIMARY KEY (`id`),
     KEY `author_id` (`author_id`),
     FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`)
+);
+
+CREATE TABLE `comments`
+(
+    `id`      bigint(20)   NOT NULL AUTO_INCREMENT,
+    `title`   varchar(64)  NOT NULL,
+    `body`    varchar(512) NOT NULL,
+    `book_id` int(11)      NOT NULL,
+    `user_id` bigint(20)   NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`book_id`) REFERENCES `books` (`id`),
+    FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+
 );
 
 # Initial data

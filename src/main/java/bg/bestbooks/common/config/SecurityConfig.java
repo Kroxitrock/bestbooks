@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     http
         .authorizeRequests()
         .anyRequest()
-        .hasAnyAuthority("ROLE_ADMIN")
+        .hasAnyRole("ADMIN")
         .and()
         .httpBasic();
   }
