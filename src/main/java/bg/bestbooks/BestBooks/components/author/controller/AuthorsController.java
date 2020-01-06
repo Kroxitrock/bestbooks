@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("authors")
+@RequestMapping("/authors")
 public class AuthorsController {
+
   private final AuthorsService authorsService;
 
   @Autowired
@@ -29,7 +30,7 @@ public class AuthorsController {
   }
 
   @GetMapping(path = "/{id}")
-  public Author getAuthor(@PathVariable Integer id) {
+  public Author getAuthor(@PathVariable("id") Integer id) {
     return authorsService.findById(id);
   }
 
@@ -39,12 +40,12 @@ public class AuthorsController {
   }
 
   @PutMapping(path = "/{id}")
-  public Author updateAuthor(@PathVariable Integer id, @RequestBody Author author) {
+  public Author updateAuthor(@PathVariable("id") Integer id, @RequestBody Author author) {
     return authorsService.updateAuthor(id, author);
   }
 
   @DeleteMapping(path = "/{id}")
-  public void deleteAuthor(@PathVariable Integer id) {
+  public void deleteAuthor(@PathVariable("id") Integer id) {
     authorsService.deleteAuthor(id);
   }
 }
