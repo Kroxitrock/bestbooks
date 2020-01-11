@@ -7,11 +7,9 @@ USE `bestbooks`;
 CREATE TABLE `users`
 (
     `id`       bigint(20)   NOT NULL AUTO_INCREMENT,
-    `email`    varchar(128) NOT NULL,
     `username` varchar(32)  NOT NULL,
     `password` varchar(128) NOT NULL,
     PRIMARY KEY (`id`),
-    UNIQUE KEY `email` (`email`),
     UNIQUE KEY `username` (`username`)
 );
 
@@ -80,10 +78,8 @@ CREATE TABLE `comments`
 );
 
 # Initial data
-
-INSERT INTO `users` (email, username, password)
-VALUES ('admin@admin.ad',
-        'admin',
+INSERT INTO `users` (username, password)
+VALUES ('admin',
         '$2a$10$DPzfOeKYt3FYNKkNb7vCruQjcD3oqx2k/uf3UlfDXHZXL.SNLtTp6');
 
 INSERT INTO `authorities` (name, description)
@@ -163,3 +159,48 @@ VALUES (3, 7);
 
 INSERT INTO `users_authorities`
 VALUES (1, 1);
+
+/*
+delimiter //
+
+CREATE FUNCTION compare (uid BIGINT, rid SMALLINT)
+RETURNS BOOLEAN DETERMINISTIC
+BEGIN
+	SET @user_auths := (SELECT authority_id AS id FROM `users_authorities` WHERE user_id = uid);
+	SET @role_auths := (SELECT child_id AS id FROM `authorities_authorities` WHERE parent_id = rid);
+   	
+	SET @a = (select count(*) from (select @user_auths) as a where not exists (select @role_auths));
+	SET @b = (select count(*) from (select @role_auths) as a where not exists (select @user_auths));
+
+	IF @a = 0 AND @b = 0 THEN
+		RETURN TRUE;
+	ELSE
+		RETURN FALSE;
+	END IF;
+END//
+
+CREATE PROCEDURE set_role_if_needed (uid BIGINT, rid SMALLINT, OUT aid SMALLINT)
+BEGIN
+	IF (compare(uid, rid) IS TRUE) THEN
+			SET aid := rid;
+			DELETE FROM `users_authorities` WHERE user_id = uid;
+    END IF;
+END//
+
+
+CREATE TRIGGER auth_role_trigger
+AFTER INSERT ON users_authorities
+FOR EACH ROW 
+BEGIN
+	SET @auth_count := (SELECT COUNT(*) FROM `users_authorities` WHERE user_id = NEW.user_id);
+	
+	IF @auth_count = 1 THEN 
+		CALL set_role_if_needed(NEW.user_id, 3, NEW.authority_id);
+    ELSEIF @auth_count = 4 THEN
+		CALL set_role_if_needed(NEW.user_id, 2, NEW.authority_id);
+    ELSEIF @auth_count = 6 THEN 
+		CALL set_role_if_needed(NEW.user_id, 1, NEW.authority_id);
+    END IF;
+END//
+
+delimiter ;*/

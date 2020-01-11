@@ -21,7 +21,6 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String email;
   private String username;
   private String password;
 
@@ -48,14 +47,6 @@ public class User {
 
   public void setId(Long id) {
     this.id = id;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
   }
 
   public String getUsername() {
