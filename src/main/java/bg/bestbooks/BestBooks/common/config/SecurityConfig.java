@@ -31,7 +31,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
   @Autowired
-
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
     auth
@@ -41,8 +40,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.csrf().disable()
-        .authorizeRequests()
+    http.formLogin();
+
+    http.csrf().disable();
+
+    http.authorizeRequests()
         .anyRequest()
         .permitAll()
         .and()
