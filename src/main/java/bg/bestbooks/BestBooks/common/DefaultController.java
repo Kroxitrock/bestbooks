@@ -1,14 +1,14 @@
 package bg.bestbooks.BestBooks.common;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 public class DefaultController {
 
   @GetMapping
-  public ResponseEntity<String> healthCheck() {
-    return ResponseEntity.ok("System is up and running.");
+  public String healthCheck() {
+    return "index";
   }
 }
