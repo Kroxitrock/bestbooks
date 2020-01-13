@@ -13,6 +13,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "books")
@@ -26,9 +27,8 @@ public class Book {
 
   private String description;
 
-  @Lob
-  @Column(name = "cover", columnDefinition = "BLOB")
-  private byte[] cover;
+  @Type(type = "text")
+  private String cover;
 
   private Short pages;
 
@@ -71,11 +71,11 @@ public class Book {
     this.author = author;
   }
 
-  public byte[] getCover() {
+  public String getCover() {
     return cover;
   }
 
-  public void setCover(byte[] cover) {
+  public void setCover(String cover) {
     this.cover = cover;
   }
 
@@ -101,7 +101,7 @@ public class Book {
         "id=" + id +
         ", name='" + name + '\'' +
         ", description='" + description + '\'' +
-        ", cover=" + Arrays.toString(cover) +
+        ", cover=" + cover +
         ", pages=" + pages +
         ", author=" + author +
         ", comments=" + comments +

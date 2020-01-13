@@ -1,46 +1,105 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="en"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
   <script type="application/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script type="application/javascript" src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script type="application/javascript" src="bootstrap-4.4.1-dist/bootstrap-4.4.1-dist/js/bootstrap.bundle.min.js"></script>
 
   <link rel="stylesheet" type="text/css" href="bootstrap-4.4.1-dist/bootstrap-4.4.1-dist/css/bootstrap.min.css">
   <title>Best Books</title>
 </head>
 <body>
-  <header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <a class="navbar-brand" href="#">Best Books</a>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-          </li>
-        </ul>
+<header>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">Best Books</a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
 
-        <ul class="navbar-nav my-2 my-lg-0">
-          <li class="nav-item active">
-            <a class="nav-link" href="/login" sec:authorize="isAnonymous()">Login<span class="sr-only">(current)</span></a>
-          </li>
+      <ul class="navbar-nav my-2 my-lg-0">
+        <li class="nav-item active">
+          <a class="nav-link" href="/login" sec:authorize="isAnonymous()">Login<span
+              class="sr-only">(current)</span></a>
+        </li>
 
-          <li class="nav-item active">
-            <a class="nav-link" href="#" sec:authorize="isAuthenticated()">Profile<span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="/logout" sec:authorize="isAuthenticated()">Logout<span class="sr-only">(current)</span></a>
-          </li>
-        </ul>
-      </div>
+        <li class="nav-item active">
+          <a class="nav-link" href="#" sec:authorize="isAuthenticated()">Profile<span
+              class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/logout" sec:authorize="isAuthenticated()">Logout<span
+              class="sr-only">(current)</span></a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<div id="content" class="container-fluid">
+  <div id="books-view">
+    <nav class="navbar navbar-light bg-light">
+      <form class="mx-2 my-auto d-inline w-100">
+        <div class="input-group">
+          <input id="search" class="form-control mr-sm-2 " type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit" v-on:click="fetch">Search</button>
+        </div>
+      </form>
     </nav>
-  </header>
+    <div id="center-panel">
+      <ul class="list-unstyled">
+        <li v-for="book in books">
+          <div class="container py-3">
+            <div class="card">
+              <div class="row ">
+                <div class="col-md-4">
+                  <img :src="book.cover" class="w-50">
+                </div>
+                <div class="col-md-8 px-3">
+                  <div class="card-block px-3">
+                    <h4 class="card-title">{{book.name}}</h4>
+                    <p class="card-text">{{book.description}}</p>
+                  </div>
+                </div>
 
-  <div id="content">
-
+              </div>
+            </div>
+          </div>
+    </div>
+    </li>
+    </ul>
   </div>
+</div>
+<script type="text/javascript">
+  var booksView = new Vue({
+        el: "#books-view",
+        data: {
+          books: []
+        },
+        methods: {
+          fetch: function (event) {
+            event.preventDefault();
+            let searchParams = document.getElementById("search").value;
+            let self = this;
+            fetchBooks();
 
-  <script></script>
+            async function fetchBooks() {
+              const response = await fetch("/books?query=" + searchParams);
+              const json = await response.json();
+              self.books = json;
+              console.log(self.books);
+              return json;
+            }
+          }
+        }
+      }
+  )
+
+</script>
+
+<script></script>
 </body>
 </html>
