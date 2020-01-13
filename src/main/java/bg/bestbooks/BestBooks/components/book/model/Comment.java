@@ -1,6 +1,7 @@
 package bg.bestbooks.BestBooks.components.book.model;
 
 import bg.bestbooks.BestBooks.components.user.model.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,6 +24,7 @@ public class Comment {
 
   @ManyToOne
   @JoinColumn(name = "book_id")
+  @JsonIgnore
   private Book book;
 
   @ManyToOne

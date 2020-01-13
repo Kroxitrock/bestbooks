@@ -23,8 +23,8 @@ public class BooksService {
     this.commentsRepository = commentsRepository;
   }
 
-  public List<Book> findAll() {
-    return booksRepository.findAll();
+  public List<Book> findBooks(String query) {
+    return booksRepository.findByNameContaining(query);
   }
 
   public Optional<Book> findById(Integer id) {
@@ -47,7 +47,7 @@ public class BooksService {
     booksRepository.deleteById(id);
   }
 
-  public List<Comment> findAll(Integer bookId) {
+  public List<Comment> findBooks(Integer bookId) {
     return commentsRepository.findAllByBook_Id(bookId);
   }
 

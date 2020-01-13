@@ -1,5 +1,6 @@
 package bg.bestbooks.BestBooks.components.user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -24,6 +25,7 @@ public class User {
   private String username;
   private String password;
 
+  @JsonIgnore
   @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
   @JoinTable(
       joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},

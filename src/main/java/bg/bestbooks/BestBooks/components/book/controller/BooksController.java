@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -33,8 +34,8 @@ public class BooksController {
   }
 
   @GetMapping(produces = "application/json")
-  public List<Book> findAll() {
-    return booksService.findAll();
+  public List<Book> findBooks(@RequestParam(name = "query", defaultValue = "") String query) {
+    return booksService.findBooks(query);
   }
 
   @GetMapping(path = "/{id}", produces = "application/json")
@@ -56,7 +57,7 @@ public class BooksController {
 
   @GetMapping(path = "/{id}/comments")
   public List<Comment> findComments(@PathVariable Integer id) {
-    return booksService.findAll(id);
+    return booksService.findBooks(id);
   }
 
   @PostMapping(path = "/comments")
