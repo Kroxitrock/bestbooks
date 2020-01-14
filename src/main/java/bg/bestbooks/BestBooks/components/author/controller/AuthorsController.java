@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/authors")
+@RequestMapping("api/authors")
 public class AuthorsController {
 
   private final AuthorsService authorsService;

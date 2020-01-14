@@ -1,43 +1,12 @@
 <!DOCTYPE html>
-<html lang="en"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
-  <script type="application/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-  <script type="application/javascript" src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-  <link rel="stylesheet" type="text/css" href="bootstrap-4.4.1-dist/bootstrap-4.4.1-dist/css/bootstrap.min.css">
   <title>Best Books</title>
 </head>
 <body>
-<header>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <a class="navbar-brand" href="#">Best Books</a>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-        </li>
-      </ul>
-
-      <ul class="navbar-nav my-2 my-lg-0">
-        <li class="nav-item active">
-          <a class="nav-link" href="/login" sec:authorize="isAnonymous()">Login<span
-              class="sr-only">(current)</span></a>
-        </li>
-
-        <li class="nav-item active">
-          <a class="nav-link" href="#" sec:authorize="isAuthenticated()">Profile<span
-              class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item active">
-          <a class="nav-link" href="/logout" sec:authorize="isAuthenticated()">Logout<span
-              class="sr-only">(current)</span></a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-</header>
+<header th:insert="header.html :: header"></header>
 
 <div id="content" class="container-fluid">
   <div id="books-view">
@@ -51,7 +20,7 @@
     </nav>
     <div id="center-panel">
       <ul class="list-unstyled">
-        <li v-for="book in books">
+        <li class="table-hover pointer-event" v-for="book in books" v-on:click="openBook($event, book.id)">
           <div class="container py-3">
             <div class="card">
               <div class="row ">
@@ -87,12 +56,14 @@
             fetchBooks();
 
             async function fetchBooks() {
-              const response = await fetch("/books?query=" + searchParams);
+              const response = await fetch("api/books?query=" + searchParams);
               const json = await response.json();
               self.books = json;
-              console.log(self.books);
               return json;
             }
+          },
+          openBook: function(event, id) {
+            window.location.href = "/books/" + id;
           }
         }
       }
