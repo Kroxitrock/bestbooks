@@ -1,6 +1,8 @@
 package bg.bestbooks.BestBooks.components.user.service.dto;
 
-public class UserDto {
+import bg.bestbooks.BestBooks.components.user.model.User;
+
+public class InputUserDto {
 
   private String username;
   private String password;
@@ -9,15 +11,14 @@ public class UserDto {
     return username;
   }
 
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
   public String getPassword() {
     return password;
   }
 
-  public void setPassword(String password) {
-    this.password = password;
+  public User transformToEntity() {
+    User user = new User();
+    user.setUsername(username);
+    user.setPassword(password);
+    return user;
   }
 }

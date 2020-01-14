@@ -4,8 +4,12 @@ import bg.bestbooks.BestBooks.components.book.model.Book;
 import bg.bestbooks.BestBooks.components.book.model.Comment;
 import bg.bestbooks.BestBooks.components.book.repository.BooksRepository;
 import bg.bestbooks.BestBooks.components.book.repository.CommentsRepository;
+import bg.bestbooks.BestBooks.components.book.service.dto.InputBookDto;
+import bg.bestbooks.BestBooks.components.book.service.dto.InputCommentDto;
+import bg.bestbooks.BestBooks.components.book.service.dto.OutputBookDto;
+import bg.bestbooks.BestBooks.components.book.service.dto.OutputCommentDto;
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,23 +27,29 @@ public class BooksService {
     this.commentsRepository = commentsRepository;
   }
 
-  public List<Book> findBooks(String query) {
-    return booksRepository.findByNameContaining(query);
+  public List<OutputBookDto> findBooks(String query) {
+    return OutputBookDto.transferToDtoList(booksRepository.findByNameContaining(query));
   }
 
-  public Optional<Book> findById(Integer id) {
-    return booksRepository.findById(id);
-  }
-
-  @Transactional
-  public Book create(Book book) {
-    return booksRepository.save(book);
+  public OutputBookDto findById(Integer id) {
+    Book book = booksRepository.findById(id).orElseThrow(NoSuchElementException::new);
+    return new OutputBookDto(book);
   }
 
   @Transactional
-  public Book update(Integer id, Book book) {
+  public OutputBookDto create(InputBookDto inputBook) {
+    Book book = inputBook.transformToEntity();
+    book = booksRepository.save(book);
+    return new OutputBookDto(book);
+  }
+
+  @Transactional
+  public OutputBookDto update(Integer id, InputBookDto inputBookDto) {
+    Book book = booksRepository.findById(id).orElseThrow(NoSuchElementException::new);
+    book = inputBookDto.transformToEntity();
     book.setId(id);
-    return booksRepository.save(book);
+    book = booksRepository.save(book);
+    return new OutputBookDto(book);
   }
 
   @Transactional
@@ -47,19 +57,24 @@ public class BooksService {
     booksRepository.deleteById(id);
   }
 
-  public List<Comment> findBooks(Integer bookId) {
-    return commentsRepository.findAllByBook_Id(bookId);
+  public List<OutputCommentDto> findBooks(Integer bookId) {
+    return OutputCommentDto.transferToDtoList(commentsRepository.findAllByBook_Id(bookId));
   }
 
   @Transactional
-  public Comment createComment(Comment comment) {
-    return commentsRepository.save(comment);
+  public OutputCommentDto createComment(InputCommentDto inputComment) {
+    Comment comment = inputComment.transformToEntity();
+    comment = commentsRepository.save(comment);
+    return new OutputCommentDto(comment);
   }
 
   @Transactional
-  public Comment updateComment(Long id, Comment comment) {
+  public OutputCommentDto updateComment(Long id, InputCommentDto inputComment) {
+    Comment comment = commentsRepository.findById(id).orElseThrow(NoSuchElementException::new);
+    comment = inputComment.transformToEntity();
     comment.setId(id);
-    return commentsRepository.save(comment);
+    comment = commentsRepository.save(comment);
+    return new OutputCommentDto(comment);
   }
 
   @Transactional

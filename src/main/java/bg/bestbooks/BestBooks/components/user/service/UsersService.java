@@ -2,7 +2,8 @@ package bg.bestbooks.BestBooks.components.user.service;
 
 import bg.bestbooks.BestBooks.components.user.model.User;
 import bg.bestbooks.BestBooks.components.user.repository.UsersRepository;
-import bg.bestbooks.BestBooks.components.user.service.dto.UserDto;
+import bg.bestbooks.BestBooks.components.user.service.dto.InputUserDto;
+import bg.bestbooks.BestBooks.components.user.service.dto.OutputUserDto;
 import java.util.List;
 import java.util.NoSuchElementException;
 import javax.transaction.Transactional;
@@ -19,30 +20,36 @@ public class UsersService {
     this.usersRepository = usersRepository;
   }
 
-  public User findById(Long id) {
-    return usersRepository.findById(id).orElse(null);
+  public OutputUserDto findById(Long id) {
+    return new OutputUserDto(usersRepository.findById(id).orElse(null));
   }
 
-  public List<User> findAll() {
-    return usersRepository.findAll();
-  }
-
-  @Transactional
-  public User createUser(User user) {
-    return usersRepository.save(user);
+  public List<OutputUserDto> findAll() {
+    return OutputUserDto.transferToDtoList(usersRepository.findAll());
   }
 
   @Transactional
-  public User register(UserDto dto) {
-    User user = new User(dto.getUsername(), dto.getPassword());
-    return usersRepository.save(user);
+  public OutputUserDto createUser(InputUserDto inputUser) {
+    User user = inputUser.transformToEntity();
+    user = usersRepository.save(user);
+    return new OutputUserDto(user);
   }
 
   @Transactional
-  public User updateUser(Long id, User user) {
+  public OutputUserDto register(InputUserDto inputUser) {
+    User user = inputUser.transformToEntity();
+    user = usersRepository.save(user);
+    user.setAuthorities(User.getUserAuthority());
+    return new OutputUserDto(user);
+  }
+
+  @Transactional
+  public OutputUserDto updateUser(Long id, InputUserDto inputUser) {
     if (usersRepository.existsById(id)) {
+      User user = inputUser.transformToEntity();
       user.setId(id);
-      return usersRepository.save(user);
+      user = usersRepository.save(user);
+      return new OutputUserDto(user);
     }
 
     throw new NoSuchElementException();

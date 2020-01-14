@@ -1,8 +1,8 @@
 package bg.bestbooks.BestBooks.components.user.controller;
 
-import bg.bestbooks.BestBooks.components.user.model.User;
 import bg.bestbooks.BestBooks.components.user.service.UsersService;
-import bg.bestbooks.BestBooks.components.user.service.dto.UserDto;
+import bg.bestbooks.BestBooks.components.user.service.dto.InputUserDto;
+import bg.bestbooks.BestBooks.components.user.service.dto.OutputUserDto;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,29 +26,29 @@ public class UsersController {
   }
 
   @GetMapping
-  public List<User> getUsers() {
+  public List<OutputUserDto> getUsers() {
     return usersService.findAll();
   }
 
   @GetMapping(path = "/{id}")
-  public User getUser(@PathVariable("id") Long id) {
+  public OutputUserDto getUser(@PathVariable("id") Long id) {
     return usersService.findById(id);
   }
 
   @PostMapping
   @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-  public User createUser(@RequestBody User user) {
+  public OutputUserDto createUser(@RequestBody InputUserDto user) {
     return usersService.createUser(user);
   }
 
   @PostMapping(path = "/register")
-  public User register(@RequestBody UserDto user) {
+  public OutputUserDto register(@RequestBody InputUserDto user) {
     return usersService.register(user);
   }
 
   @PutMapping(path = "/{id}")
   @PreAuthorize("hasAuthority('ADMIN') or id = authentication.principal.id")
-  public User updateUser(@PathVariable("id") Long id, @RequestBody User user) {
+  public OutputUserDto updateUser(@PathVariable("id") Long id, @RequestBody InputUserDto user) {
     return usersService.updateUser(id, user);
   }
 }

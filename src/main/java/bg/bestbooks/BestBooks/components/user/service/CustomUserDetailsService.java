@@ -25,7 +25,8 @@ public class CustomUserDetailsService implements UserDetailsService {
   }
 
   private static Collection<? extends GrantedAuthority> getAuthorities(User user) {
-    String[] userAuthorities = user.getAuthorities().stream().map(Authority::getName).toArray(String[]::new);
+    String[] userAuthorities = user.getAuthorities().stream().map(Authority::getName)
+        .toArray(String[]::new);
     return AuthorityUtils.createAuthorityList(userAuthorities);
   }
 
@@ -33,7 +34,8 @@ public class CustomUserDetailsService implements UserDetailsService {
   public UserDetails loadUserByUsername(String s) {
     User user = usersRepository.findByUsername(s)
         .orElseThrow(() -> new UsernameNotFoundException("username " + s + " not found"));
-    return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+    return new org.springframework.security.core.userdetails.User(user.getUsername(),
+        user.getPassword(),
         getAuthorities(user));
   }
 }

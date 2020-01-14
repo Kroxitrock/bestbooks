@@ -1,10 +1,11 @@
 package bg.bestbooks.BestBooks.components.book.controller;
 
-import bg.bestbooks.BestBooks.components.book.model.Book;
-import bg.bestbooks.BestBooks.components.book.model.Comment;
 import bg.bestbooks.BestBooks.components.book.service.BooksService;
+import bg.bestbooks.BestBooks.components.book.service.dto.InputBookDto;
+import bg.bestbooks.BestBooks.components.book.service.dto.InputCommentDto;
+import bg.bestbooks.BestBooks.components.book.service.dto.OutputBookDto;
+import bg.bestbooks.BestBooks.components.book.service.dto.OutputCommentDto;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,25 +29,23 @@ public class BooksController {
   }
 
   @PostMapping(consumes = "application/json")
-  public Book createBook(@RequestBody Book book) {
-    System.out.println(book);
+  public OutputBookDto createBook(@RequestBody InputBookDto book) {
     return booksService.create(book);
   }
 
   @GetMapping(produces = "application/json")
-  public List<Book> findBooks(@RequestParam(name = "query", defaultValue = "") String query) {
+  public List<OutputBookDto> findBooks(
+      @RequestParam(name = "query", defaultValue = "") String query) {
     return booksService.findBooks(query);
   }
 
   @GetMapping(path = "/{id}", produces = "application/json")
-  public Book findById(@PathVariable Integer id) {
-    Optional<Book> book = booksService.findById(id);
-
-    return book.orElse(null);
+  public OutputBookDto findById(@PathVariable Integer id) {
+    return booksService.findById(id);
   }
 
   @PutMapping(consumes = "application/json", path = "/{id}")
-  public void updateBook(@PathVariable Integer id, @RequestBody Book book) {
+  public void updateBook(@PathVariable Integer id, @RequestBody InputBookDto book) {
     booksService.update(id, book);
   }
 
@@ -56,17 +55,18 @@ public class BooksController {
   }
 
   @GetMapping(path = "/{id}/comments")
-  public List<Comment> findComments(@PathVariable Integer id) {
+  public List<OutputCommentDto> findComments(@PathVariable Integer id) {
     return booksService.findBooks(id);
   }
 
   @PostMapping(path = "/comments")
-  public Comment createComment(@RequestBody Comment comment) {
+  public OutputCommentDto createComment(@RequestBody InputCommentDto comment) {
     return booksService.createComment(comment);
   }
 
   @PutMapping(path = "/comments/{id}")
-  public Comment updateComment(@PathVariable Long id, @RequestBody Comment comment) {
+  public OutputCommentDto updateComment(@PathVariable Long id,
+      @RequestBody InputCommentDto comment) {
     return booksService.updateComment(id, comment);
   }
 

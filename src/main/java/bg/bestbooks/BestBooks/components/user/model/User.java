@@ -43,6 +43,12 @@ public class User {
     authorities.add(Authority.USER);
   }
 
+  public static List<Authority> getUserAuthority() {
+    List<Authority> authorities = new ArrayList<>();
+    authorities.add(Authority.USER);
+    return authorities;
+  }
+
   public Long getId() {
     return id;
   }

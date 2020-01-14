@@ -1,7 +1,8 @@
 package bg.bestbooks.BestBooks.components.author.controller;
 
-import bg.bestbooks.BestBooks.components.author.model.Author;
 import bg.bestbooks.BestBooks.components.author.service.AuthorsService;
+import bg.bestbooks.BestBooks.components.author.service.dto.InputAuthorDto;
+import bg.bestbooks.BestBooks.components.author.service.dto.OutputAuthorDto;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,22 +26,23 @@ public class AuthorsController {
   }
 
   @GetMapping
-  public List<Author> getAuthors() {
+  public List<OutputAuthorDto> getAuthors() {
     return authorsService.findAll();
   }
 
   @GetMapping(path = "/{id}")
-  public Author getAuthor(@PathVariable("id") Integer id) {
+  public OutputAuthorDto getAuthor(@PathVariable("id") Integer id) {
     return authorsService.findById(id);
   }
 
   @PostMapping
-  public Author createAuthor(@RequestBody Author author) {
+  public OutputAuthorDto createAuthor(@RequestBody InputAuthorDto author) {
     return authorsService.createAuthor(author);
   }
 
   @PutMapping(path = "/{id}")
-  public Author updateAuthor(@PathVariable("id") Integer id, @RequestBody Author author) {
+  public OutputAuthorDto updateAuthor(@PathVariable("id") Integer id,
+      @RequestBody InputAuthorDto author) {
     return authorsService.updateAuthor(id, author);
   }
 
