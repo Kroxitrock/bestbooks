@@ -57,23 +57,34 @@
         },
         methods: {
           createComment: async function (event) {
+            event.preventDefault();
+            const csrfResponse = await fetch('/csrf');
+
+            const csrf = await csrfResponse.json();
+
+            console.log(csrf);
+
             let data = {
               book: this.id,
               title: document.getElementById("title").value,
               body: document.getElementById("body").value
             };
+            console.log(data)
             const response = await fetch('/api/books/comments', {
               method: 'POST', // *GET, POST, PUT, DELETE, etc.
               mode: 'same-origin', // no-cors, *cors, same-origin
               cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
               credentials: 'same-origin', // include, *same-origin, omit
               headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrf.token
               },
               redirect: 'follow', // manual, *follow, error
               referrerPolicy: 'no-referrer', // no-referrer, *client
               body: JSON.stringify(data) // body data type must match "Content-Type" header
             });
+            const json = response.json();
+            console.log(json);
           }
         },
         mounted: async function () {

@@ -42,12 +42,13 @@ public class UsersController {
   }
 
   @PostMapping(path = "/register")
+  @PreAuthorize("isAnonymous()")
   public OutputUserDto register(@RequestBody InputUserDto user) {
     return usersService.register(user);
   }
 
   @PutMapping(path = "/{id}")
-  @PreAuthorize("hasAuthority('ADMIN') or id = authentication.principal.id")
+  @PreAuthorize("hasAuthority('ADMIN')")
   public OutputUserDto updateUser(@PathVariable("id") Long id, @RequestBody InputUserDto user) {
     return usersService.updateUser(id, user);
   }

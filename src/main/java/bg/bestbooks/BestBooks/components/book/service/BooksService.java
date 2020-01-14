@@ -8,8 +8,12 @@ import bg.bestbooks.BestBooks.components.book.service.dto.InputBookDto;
 import bg.bestbooks.BestBooks.components.book.service.dto.InputCommentDto;
 import bg.bestbooks.BestBooks.components.book.service.dto.OutputBookDto;
 import bg.bestbooks.BestBooks.components.book.service.dto.OutputCommentDto;
+import bg.bestbooks.BestBooks.components.user.model.User;
+import bg.bestbooks.BestBooks.components.user.repository.UsersRepository;
+import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
+import javax.security.sasl.AuthenticationException;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,10 +25,13 @@ public class BooksService {
 
   private final CommentsRepository commentsRepository;
 
+  private final UsersRepository usersRepository;
+
   @Autowired
-  public BooksService(BooksRepository booksRepository, CommentsRepository commentsRepository) {
+  public BooksService(BooksRepository booksRepository, CommentsRepository commentsRepository, UsersRepository usersRepository) {
     this.booksRepository = booksRepository;
     this.commentsRepository = commentsRepository;
+    this.usersRepository = usersRepository;
   }
 
   public List<OutputBookDto> findBooks(String query) {
@@ -62,8 +69,11 @@ public class BooksService {
   }
 
   @Transactional
-  public OutputCommentDto createComment(InputCommentDto inputComment) {
+  public OutputCommentDto createComment(InputCommentDto inputComment, Principal principal)
+      throws AuthenticationException {
+    User user = usersRepository.findByUsername(principal.getName()).orElseThrow(AuthenticationException::new);
     Comment comment = inputComment.transformToEntity();
+    comment.setUser(user);
     comment = commentsRepository.save(comment);
     return new OutputCommentDto(comment);
   }
