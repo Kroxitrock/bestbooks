@@ -2,14 +2,12 @@ package bg.bestbooks.BestBooks.components.book.service.dto;
 
 import bg.bestbooks.BestBooks.components.book.model.Book;
 import bg.bestbooks.BestBooks.components.book.model.Comment;
-import bg.bestbooks.BestBooks.components.user.model.User;
 
 public class InputCommentDto {
 
   private String title;
   private String body;
-  private BookDto book;
-  private UserDto user;
+  private Integer book;
 
   public void setTitle(String title) {
     this.title = title;
@@ -19,43 +17,16 @@ public class InputCommentDto {
     this.body = body;
   }
 
-  public void setBook(BookDto book) {
+  public void setBook(Integer book) {
     this.book = book;
   }
 
-  public void setUser(UserDto user) {
-    this.user = user;
-  }
 
   public Comment transformToEntity() {
     Comment comment = new Comment();
     comment.setTitle(title);
     comment.setBody(body);
-    comment.setBook(book.transformToEntity());
-    comment.setUser(user.transformToEntity());
+    comment.setBook(new Book(book));
     return comment;
   }
-
-  private static class BookDto {
-
-    private Integer id;
-
-    public Book transformToEntity() {
-      Book book = new Book();
-      book.setId(id);
-      return book;
-    }
-  }
-
-  private static class UserDto {
-
-    private Long id;
-
-    public User transformToEntity() {
-      User user = new User();
-      user.setId(id);
-      return user;
-    }
-  }
-
 }

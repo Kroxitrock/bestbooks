@@ -8,6 +8,7 @@ import java.util.List;
 
 public class OutputBookDto {
 
+  private Integer id;
   private String name;
   private String description;
   private String cover;
@@ -19,6 +20,7 @@ public class OutputBookDto {
     if (book == null) {
       return;
     }
+    id = book.getId();
     name = book.getName();
     description = book.getDescription();
     cover = book.getCover();
@@ -32,6 +34,10 @@ public class OutputBookDto {
     books.forEach((book)
         -> outputBookDtos.add(new OutputBookDto(book)));
     return outputBookDtos;
+  }
+
+  public Integer getId() {
+    return id;
   }
 
   public String getName() {

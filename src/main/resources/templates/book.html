@@ -1,11 +1,92 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+>
 <head>
   <meta charset="UTF-8">
   <title>Best Books</title>
 </head>
 <body>
 <header th:replace="header.html :: header"></header>
+<span id="book-id" th:text="${{id}}" type="hidden"></span>
+<div class="container py-3" id="container">
+  <div class="card">
+    <div class="row ">
+      <div class="col-md-4">
+        <img :src="book.cover" class="w-100">
+      </div>
+      <div class="col-md-8 px-3">
+        <div class="card-block px-3">
+          <h4 class="card-title">{{book.name}}</h4>
+          <p class="card-text"></p>
+          <p class="card-text">{{book.description}}</p>
+          <p class="card-text">Author: {{book.author.firstName}} {{book.author.lastName}}</p>
+          <p class="card-text">Pages: {{book.pages}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form id="comment-form" sec:authorize="isAuthenticated()">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input type="text" class="form-control" id="title" placeholder="Title..." name="title">
+    </div>
+    <div class="form-group">
+      <label for="body">Body</label>
+      <textarea form="comment-form" class="form-control" id="body" rows="4" name="body"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary" v-on:click="createComment">Submit</button>
+  </form>
+  <br>
+
+  <div class="card" v-for="comment in book.comments">
+    <div class="card-body">
+      <h3 class="card-title">{{comment.title}}</h3>
+      <h6 class="card-subtitle">By: {{comment.user.username}}</h6>
+      <p class="card-text">{{comment.body}}</p>
+    </div>
+  </div>
+</div>
+
+<script th:inline="javascript">
+  new Vue({
+        el: "#container",
+        data: {
+          book: {},
+          id: 0
+        },
+        methods: {
+          createComment: async function (event) {
+            let data = {
+              book: this.id,
+              title: document.getElementById("title").value,
+              body: document.getElementById("body").value
+            };
+            const response = await fetch('/api/books/comments', {
+              method: 'POST', // *GET, POST, PUT, DELETE, etc.
+              mode: 'same-origin', // no-cors, *cors, same-origin
+              cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+              credentials: 'same-origin', // include, *same-origin, omit
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              redirect: 'follow', // manual, *follow, error
+              referrerPolicy: 'no-referrer', // no-referrer, *client
+              body: JSON.stringify(data) // body data type must match "Content-Type" header
+            });
+          }
+        },
+        mounted: async function () {
+          this.id = document.getElementById("book-id").textContent;
+          console.log(this.id);
+          const response = await fetch("/api/books/" + this.id);
+          const json = await response.json();
+          console.log(json);
+          this.book = json;
+        }
+      }
+  )
+</script>
+</div>
 </body>
 </html>

@@ -36,6 +36,13 @@ public class Book {
   @OneToMany(mappedBy = "book")
   private List<Comment> comments;
 
+  public Book() {
+  }
+
+  public Book(Integer id) {
+    this.id = id;
+  }
+
   public Integer getId() {
     return id;
   }
