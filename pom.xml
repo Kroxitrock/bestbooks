@@ -88,7 +88,7 @@
 
   <properties>
     <java.version>1.8</java.version>
-    <sptingfox.version>2.9.2</sptingfox.version>
+    <sptingfox.version>2.10.0</sptingfox.version>
   </properties>
 
   <version>0.0.1-SNAPSHOT</version>
